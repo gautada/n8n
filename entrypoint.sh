@@ -2,5 +2,6 @@
 #
 # entrypoint: Simple entrypoint overload
 
-tail -f /dev/null
-
+# n8n
+# tail -f /dev/null
+/usr/local/bin/n8n

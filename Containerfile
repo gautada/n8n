@@ -40,8 +40,9 @@ COPY entrypoint.sh /usr/bin/container-entrypoint
 # │ APPLICATION        │
 # ╰――――――――――――――――――――╯
 RUN /bin/sed -i 's|dl-cdn.alpinelinux.org/alpine/|mirror.math.princeton.edu/pub/alpinelinux/|g' /etc/apk/repositories \
-  && /sbin/apk add --no-cache nodejs npm
-RUN npm install "n8n@${IMAGE_VERSION}" -g
+  && /sbin/apk add --no-cache nodejs npm \
+ && echo "n8n@${IMAGE_VERSION}" \
+ && npm install "n8n@${IMAGE_VERSION}" -g
 
 # ╭――――――――――――――――――――╮
 # │ CONTAINER          │
