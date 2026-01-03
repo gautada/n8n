@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+set -e
+
+su cloudflared -c "/usr/local/bin/n8n"

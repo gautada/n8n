@@ -1,8 +1,8 @@
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.23
 FROM docker.io/gautada/alpine:$ALPINE_VERSION as CONTAINER
 
 ARG IMAGE_NAME=n8n
-ARG IMAGE_VERSION=1.86.1
+ARG IMAGE_VERSION=2.1.5
 
 # ╭――――――――――――――――――――╮
 # │ METADATA           │
@@ -32,24 +32,16 @@ RUN /usr/sbin/usermod -l $USER alpine \
 # │ ENTRYPOINT         │
 # ╰――――――――――――――――――――╯
 # Overwrite upstream entrypoint
-COPY entrypoint.sh /usr/bin/container-entrypoint
+# COPY entrypoint.sh /usr/bin/container-entrypoint
 
 # ╭――――――――――――――――――――╮
 # │ APPLICATION        │
 # ╰――――――――――――――――――――╯
+COPY n8n.s6 /etc/services.d/n8n/run
 RUN /bin/sed -i 's|dl-cdn.alpinelinux.org/alpine/|mirror.math.princeton.edu/pub/alpinelinux/|g' /etc/apk/repositories \
- && /sbin/apk add --no-cache nodejs npm \
+ && /sbin/apk add --no-cache nodejs npm python3 \
  && echo "n8n@${IMAGE_VERSION}" \
  && npm install "n8n@${IMAGE_VERSION}" -g \
  && ln -fsv /mnt/volumes/container/n8n /home/$USER/.n8n
-
-# ╭――――――――――――――――――――╮
-# │ CONTAINER          │
-# ╰――――――――――――――――――――╯
-USER $USER
-VOLUME /mnt/volumes/backup
-VOLUME /mnt/volumes/configmaps
-VOLUME /mnt/volumes/container
-VOLUME /mnt/volumes/secrets
 EXPOSE 8080/tcp
 WORKDIR /home/$USER
