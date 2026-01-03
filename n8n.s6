@@ -2,4 +2,4 @@
 
 set -e
 
-su cloudflared -c "/usr/local/bin/n8n"
+su n8n -c "/usr/local/bin/n8n"
